@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from "vue";
-import { fetchWeather } from "../services/weatherAPI.ts";
+import { reactive, ref } from "vue";
+import { onMounted } from "vue";
+import { fetchWeather, fetchHourlyWeather } from "../services/weatherAPI.ts";
 import { weatherIcon } from "../utils/icons";
+import { formatDateTime } from "../utils/formatData";
 
 const searchQuery = ref("");
 const queryTimeout = ref(null);
@@ -10,6 +12,23 @@ const searchResultCity = ref(null);
 const searchResults = ref(null);
 
 const searchError = ref(null);
+
+const currentWeather = ref(null);
+
+const coordinates = reactive({
+  lat: 50.35,
+  lon: 7.6,
+});
+
+onMounted(async () => {
+  try {
+    const res = await fetchHourlyWeather(coordinates.lat, coordinates.lon);
+
+    currentWeather.value = res;
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 const getSearchResults = () => {
   clearTimeout(queryTimeout.value);
@@ -63,7 +82,7 @@ const getSearchResults = () => {
             :key="searchResult.dt"
             class="weatherRow"
           >
-            <td>{{ searchResult?.dt_txt }}</td>
+            <td>{{ formatDateTime(searchResult?.dt_txt) }}</td>
             <td>{{ Math.floor(searchResult.main?.temp_min) }}</td>
             <td>{{ Math.floor(searchResult.main?.temp_max) }}</td>
             <td>

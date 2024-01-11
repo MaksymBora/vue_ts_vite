@@ -1,11 +1,36 @@
 import axios from "axios";
+import type { CurrentWeatherTypes } from "../types/CurrentWeatherTypes";
+import type { WeatherTypes } from "../types/WeatherTypes";
 
 const API_KEY = "90909333051e5594b4d9ee0fca1d9913";
 
-export const fetchWeather = async (search: string) => {
-  const result = await axios.get(
-    `https://api.openweathermap.org/data/2.5/forecast?q=${search}&units=metric&appid=${API_KEY}`
-  );
+axios.defaults.baseURL = "https://api.openweathermap.org/data/2.5/";
 
-  return result.data;
+export const fetchWeather = async (search: string): Promise<WeatherTypes> => {
+  try {
+    const result = await axios.get(
+      `forecast?q=${search}&units=metric&appid=${API_KEY}`
+    );
+
+    return result.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const fetchHourlyWeather = async (
+  lat: string,
+  lon: string
+): Promise<CurrentWeatherTypes> => {
+  try {
+    const response = await axios.get(
+      `weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
