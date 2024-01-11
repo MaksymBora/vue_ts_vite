@@ -1,25 +1,15 @@
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
-import { weatherDescriptionIcons } from "../utils/icons";
+import { fetchWeather } from "../services/weatherAPI.ts";
+import { weatherIcon } from "../utils/icons";
 
-const API_KEY = "90909333051e5594b4d9ee0fca1d9913";
 const searchQuery = ref("");
 const queryTimeout = ref(null);
 
 const searchResultCity = ref(null);
-
 const searchResults = ref(null);
 
 const searchError = ref(null);
-
-const getDescriptionByMain = (main) => {
-  const matchingKey = Object.keys(weatherDescriptionIcons).find(
-    (key) => weatherDescriptionIcons[key].toLowerCase() === main.toLowerCase()
-  );
-
-  return matchingKey || "";
-};
 
 const getSearchResults = () => {
   clearTimeout(queryTimeout.value);
@@ -27,12 +17,9 @@ const getSearchResults = () => {
   queryTimeout.value = setTimeout(async () => {
     if (searchQuery.value !== "") {
       try {
-        const result = await axios.get(
-          `https://api.openweathermap.org/data/2.5/forecast?q=${searchQuery.value}&units=metric&appid=${API_KEY}`
-        );
-        searchResults.value = result.data.list;
-
-        searchResultCity.value = result.data.city;
+        const result = await fetchWeather(searchQuery.value);
+        searchResults.value = result.list;
+        searchResultCity.value = result.city;
       } catch {
         searchError.value = true;
       }
@@ -40,7 +27,6 @@ const getSearchResults = () => {
     }
     searchResults.value = null;
     searchResultCity.value = null;
-    data.value = null;
   }, 300);
 };
 </script>
@@ -77,14 +63,12 @@ const getSearchResults = () => {
             :key="searchResult.dt"
             class="weatherRow"
           >
-            <td>{{ searchResult.dt_txt }}</td>
-            <td>{{ Math.floor(searchResult.main.temp_min) }}</td>
-            <td>{{ Math.floor(searchResult.main.temp_max) }}</td>
+            <td>{{ searchResult?.dt_txt }}</td>
+            <td>{{ Math.floor(searchResult.main?.temp_min) }}</td>
+            <td>{{ Math.floor(searchResult.main?.temp_max) }}</td>
             <td>
               <img
-                :src="`https://openweathermap.org/img/wn/${getDescriptionByMain(
-                  searchResult.weather[0].main
-                )}@2x.png`"
+                :src="`${weatherIcon(searchResult.weather[0]?.description)}`"
                 alt="Weather Icon"
               />
             </td>
@@ -157,3 +141,4 @@ const getSearchResults = () => {
   padding: 8px 0;
 }
 </style>
+../services/weatherAPI.js
