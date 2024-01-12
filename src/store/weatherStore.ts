@@ -16,7 +16,7 @@ export const useWeatherStore = defineStore("weather", () => {
 
   const searchError = ref<boolean>();
 
-  const currentPlace = ref("");
+  const currentPlace = ref(localStorage.getItem("currentPlace") || "");
 
   function searchQuery(queryString: string) {
     query.value = queryString;

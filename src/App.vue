@@ -7,6 +7,7 @@ import { useWeatherStore } from "@/store/weatherStore";
 const weatherStore = useWeatherStore();
 
 onMounted(async () => {
+  weatherStore.setCurrentPlace(weatherStore.currentPlace);
   return await weatherStore.currentWeather();
 });
 </script>

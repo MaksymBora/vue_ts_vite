@@ -6,8 +6,13 @@ import { useWeatherStore } from "@/store/weatherStore";
 const weatherStore = useWeatherStore();
 
 const isOpen = ref(false);
+const inputText = ref("");
 
 function onClickSave() {
+  localStorage.setItem("currentPlace", inputText.value);
+
+  weatherStore.setCurrentPlace(inputText.value);
+
   weatherStore.currentWeather();
 
   isOpen.value = false;
@@ -44,9 +49,16 @@ function onClickSave() {
     <div class="settings">
       <form @submit.prevent>
         <h4>Your current location</h4>
-
+        <!-- 
         <input
           v-model="weatherStore.currentPlace"
+          type="text"
+          class="settings-input"
+          placeholder="city"
+        /> -->
+
+        <input
+          v-model="inputText"
           type="text"
           class="settings-input"
           placeholder="city"
