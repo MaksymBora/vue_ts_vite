@@ -4,10 +4,10 @@ import { onMounted } from "vue";
 import Navigation from "./components/Navigation.vue";
 import { useWeatherStore } from "@/store/weatherStore";
 
-const counterStore = useWeatherStore();
+const weatherStore = useWeatherStore();
 
 onMounted(async () => {
-  return await counterStore.currentWeather();
+  return await weatherStore.currentWeather();
 });
 </script>
 

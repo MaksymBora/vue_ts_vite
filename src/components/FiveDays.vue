@@ -1,56 +1,39 @@
 <script lang="ts" setup>
-import { ref } from "vue";
-import { fetchWeather } from "../services/weatherAPI";
+import { onMounted } from "vue";
 import WeatherTable from "@/components/WeatherTable.vue";
-import { type City, type List } from "@/types/WeatherTypes";
+import { useWeatherStore } from "@/store/weatherStore";
 
-const searchQuery = ref("");
-const queryTimeout = ref<number>();
+const weatherStore = useWeatherStore();
 
-const searchResultCity = ref<City>();
-const searchResults = ref<List[]>();
-
-const searchError = ref<boolean>();
-
-const getSearchResults = () => {
-  clearTimeout(queryTimeout.value);
-
-  queryTimeout.value = setTimeout(async () => {
-    if (searchQuery.value !== "") {
-      try {
-        const result = await fetchWeather(searchQuery.value);
-        searchResults.value = result.list;
-        searchResultCity.value = result.city;
-      } catch {
-        searchError.value = true;
-      }
-      return;
-    }
-    searchResults.value = undefined;
-    searchResultCity.value = undefined;
-  }, 300);
-};
+onMounted(async () => {
+  return await weatherStore.getFiveDaysCurrentCity();
+});
 </script>
 
 <template>
   <input
-    v-model="searchQuery"
-    @input="getSearchResults"
+    v-model="weatherStore.query"
+    @input="weatherStore.getSearchResults"
     type="text"
     class="city-input"
     placeholder="Search for a city"
   />
 
-  <p class="result-info" v-if="searchError">Sorry, something went wrong!</p>
-  <p v-if="!searchError && searchResults?.length === 0">
+  <p class="result-info" v-if="weatherStore.searchError">
+    Sorry, something went wrong!
+  </p>
+
+  <p
+    v-if="!weatherStore.searchError && weatherStore.searchResults?.length === 0"
+  >
     No results match your query, try a different term.
   </p>
 
-  <h2 class="title" v-if="searchResultCity">
-    {{ searchResultCity?.name }}
+  <h2 class="title" v-if="weatherStore.searchResultCity">
+    {{ weatherStore.searchResultCity?.name }}
   </h2>
 
-  <WeatherTable :searchResults="searchResults" />
+  <WeatherTable :searchResults="weatherStore.searchResults" />
 </template>
 
 <style scoped>
