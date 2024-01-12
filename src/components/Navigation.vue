@@ -9,10 +9,7 @@ const isOpen = ref(false);
 const inputText = ref("");
 
 function onClickSave() {
-  localStorage.setItem("currentPlace", inputText.value);
-
   weatherStore.setCurrentPlace(inputText.value);
-
   weatherStore.currentWeather();
 
   isOpen.value = false;
@@ -47,7 +44,7 @@ function onClickSave() {
   <!-- SETTING WINDOW -->
   <div v-if="isOpen" class="overlay">
     <div class="settings">
-      <form @submit.prevent>
+      <form>
         <h4>Your current location</h4>
         <!-- 
         <input
@@ -64,9 +61,7 @@ function onClickSave() {
           placeholder="city"
         />
 
-        <button @click="onClickSave" type="submit" class="btn-save">
-          Save
-        </button>
+        <button @click="onClickSave" class="btn-save">Save</button>
       </form>
     </div>
   </div>

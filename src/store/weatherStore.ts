@@ -24,6 +24,7 @@ export const useWeatherStore = defineStore("weather", () => {
 
   function setCurrentPlace(data: string) {
     currentPlace.value = data;
+    localStorage.setItem("currentPlace", data);
   }
 
   const getSearchResults = () => {

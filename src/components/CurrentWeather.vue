@@ -23,7 +23,7 @@ const formatTimestamp = (timestamp: number) => {
     </p>
     <p>
       Feels Like:
-      {{ Math.floor(weatherStore?.currentWeatherResult?.main.feels_like) }}
+      {{ Math.floor(weatherStore?.currentWeatherResult?.main.feels_like) }} ℃
     </p>
     <p>Pressure: {{ weatherStore?.currentWeatherResult?.main.pressure }}</p>
     <p>Humidity: {{ weatherStore?.currentWeatherResult?.main.humidity }}</p>
