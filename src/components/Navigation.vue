@@ -12,7 +12,11 @@ import { RouterLink } from "vue-router";
         </div>
       </RouterLink>
 
-      <RouterLink :to="{ name: 'fivedays' }" class="link">Five Days</RouterLink>
+      <RouterLink
+        :to="{ name: 'fivedays' }"
+        :class="$route.name === 'fivedays' ? 'link-active' : 'link'"
+        >Five Days</RouterLink
+      >
 
       <!-- <div class="info-icon-wrapper"> -->
       <!-- <i class="fa-solid fa-star" style="font-size: 24px"></i> -->
@@ -75,5 +79,10 @@ header {
 .link:hover {
   color: #02334a;
   scale: 1.2;
+}
+
+.link-active {
+  border-bottom: 2px solid white;
+  color: white;
 }
 </style>

@@ -12,7 +12,7 @@ const formatTimestamp = (timestamp: number) => {
 </script>
 
 <template>
-  <div v-if="weatherStore.currentWeatherResult">
+  <div v-if="weatherStore?.currentWeatherResult">
     <h2>Current Weather in {{ weatherStore?.currentWeatherResult?.name }}</h2>
     <p>
       {{ formatDateTime(weatherStore?.currentWeatherResult?.dt) }}

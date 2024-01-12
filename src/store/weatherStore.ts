@@ -9,7 +9,7 @@ interface CoordinatesType {
 }
 
 export const useWeatherStore = defineStore("weather", () => {
-  const currentWeatherResult = ref<CurrentWeatherTypes | null>(null);
+  const currentWeatherResult = ref<CurrentWeatherTypes | null>();
 
   const coordinates: CoordinatesType = {
     lat: 50.35,
@@ -27,7 +27,6 @@ export const useWeatherStore = defineStore("weather", () => {
   }
 
   return {
-    name,
     currentWeather,
     currentWeatherResult,
   };
