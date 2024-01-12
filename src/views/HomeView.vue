@@ -1,24 +1,40 @@
-<script setup>
-import { reactive, ref } from "vue";
+<script lang="ts" setup>
+import { ref } from "vue";
+import { useCounterStore } from "../store/testStore";
 import { onMounted } from "vue";
-import { fetchWeather, fetchHourlyWeather } from "../services/weatherAPI.ts";
+import { fetchWeather, fetchHourlyWeather } from "../services/weatherAPI";
 import { weatherIcon } from "../utils/icons";
 import { formatDateTime } from "../utils/formatData";
+import { type City, type List } from "@/types/WeatherTypes";
+import { type CurrentWeatherTypes } from "@/types/CurrentWeatherTypes";
 
 const searchQuery = ref("");
-const queryTimeout = ref(null);
+const queryTimeout = ref<number>();
 
-const searchResultCity = ref(null);
-const searchResults = ref(null);
+const searchResultCity = ref<City>();
+const searchResults = ref<List[]>();
 
-const searchError = ref(null);
+const searchError = ref<boolean>();
 
-const currentWeather = ref(null);
+const currentWeather = ref<CurrentWeatherTypes>();
 
-const coordinates = reactive({
+const CounterStore = useCounterStore();
+
+console.log(CounterStore.count);
+
+CounterStore.increment();
+
+console.log(CounterStore.count);
+
+interface CoordinatesType {
+  lat: number;
+  lon: number;
+}
+
+const coordinates: CoordinatesType = {
   lat: 50.35,
   lon: 7.6,
-});
+};
 
 onMounted(async () => {
   try {
@@ -44,8 +60,8 @@ const getSearchResults = () => {
       }
       return;
     }
-    searchResults.value = null;
-    searchResultCity.value = null;
+    searchResults.value = undefined;
+    searchResultCity.value = undefined;
   }, 300);
 };
 </script>
@@ -66,7 +82,10 @@ const getSearchResults = () => {
         No results match your query, try a different term.
       </p>
 
-      <h2 class="title" v-if="searchResultCity">{{ searchResultCity.name }}</h2>
+      <h2 class="title" v-if="searchResultCity">
+        {{ searchResultCity?.name }}
+      </h2>
+
       <table v-if="searchResults" class="weatherTable">
         <thead>
           <tr>
@@ -76,7 +95,7 @@ const getSearchResults = () => {
             <th>Weather Condition</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="searchResults">
           <tr
             v-for="searchResult in searchResults"
             :key="searchResult.dt"

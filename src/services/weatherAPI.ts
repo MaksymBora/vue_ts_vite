@@ -20,8 +20,8 @@ export const fetchWeather = async (search: string): Promise<WeatherTypes> => {
 };
 
 export const fetchHourlyWeather = async (
-  lat: string,
-  lon: string
+  lat: number,
+  lon: number
 ): Promise<CurrentWeatherTypes> => {
   try {
     const response = await axios.get(
