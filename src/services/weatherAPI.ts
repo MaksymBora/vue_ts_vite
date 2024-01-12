@@ -22,12 +22,11 @@ export const fetchWeather = async (
 };
 
 export const fetchHourlyWeather = async (
-  lat: number,
-  lon: number
+  city: string
 ): Promise<CurrentWeatherTypes | null> => {
   try {
     const response = await axios.get(
-      `weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
+      `weather?q=${city}&units=metric&appid=${API_KEY}`
     );
 
     return response.data;

@@ -5,11 +5,6 @@ import { fetchHourlyWeather } from "../services/weatherAPI";
 import { fetchWeather } from "../services/weatherAPI";
 import { type City, type List } from "@/types/WeatherTypes";
 
-interface CoordinatesType {
-  lat: number;
-  lon: number;
-}
-
 export const useWeatherStore = defineStore("weather", () => {
   const currentWeatherResult = ref<CurrentWeatherTypes | null>();
   const query = ref("");
@@ -21,13 +16,14 @@ export const useWeatherStore = defineStore("weather", () => {
 
   const searchError = ref<boolean>();
 
-  const coordinates: CoordinatesType = {
-    lat: 50.35,
-    lon: 7.6,
-  };
+  const currentPlace = ref("");
 
   function searchQuery(queryString: string) {
     query.value = queryString;
+  }
+
+  function setCurrentPlace(data: string) {
+    currentPlace.value = data;
   }
 
   const getSearchResults = () => {
@@ -51,7 +47,7 @@ export const useWeatherStore = defineStore("weather", () => {
 
   const getFiveDaysCurrentCity = async () => {
     try {
-      const result = await fetchWeather("Koblenz");
+      const result = await fetchWeather(currentPlace.value);
       searchResults.value = result?.list;
       searchResultCity.value = result?.city;
     } catch {
@@ -61,7 +57,7 @@ export const useWeatherStore = defineStore("weather", () => {
 
   async function currentWeather() {
     try {
-      const res = await fetchHourlyWeather(coordinates.lat, coordinates.lon);
+      const res = await fetchHourlyWeather(currentPlace.value);
 
       currentWeatherResult.value = res;
     } catch (error) {
@@ -79,5 +75,7 @@ export const useWeatherStore = defineStore("weather", () => {
     searchResultCity,
     query,
     getFiveDaysCurrentCity,
+    setCurrentPlace,
+    currentPlace,
   };
 });
