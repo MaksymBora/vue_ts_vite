@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import CurrentWeather from "@/components/CurrentWeather.vue";
+import FiveDays from "@/components/FiveDays.vue";
 </script>
 
 <template>
   <main class="container">
     <div class="wrapper">
-      <CurrentWeather />
+      <FiveDays />
     </div>
   </main>
 </template>
@@ -19,10 +19,7 @@ import CurrentWeather from "@/components/CurrentWeather.vue";
 }
 
 .wrapper {
-  /* position: relative; */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   padding: 16px 0;
 }
 </style>

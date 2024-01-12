@@ -12,10 +12,12 @@ import { RouterLink } from "vue-router";
         </div>
       </RouterLink>
 
-      <div class="info-icon-wrapper">
-        <!-- <i class="fa-solid fa-star" style="font-size: 24px"></i> -->
-        <!-- <i class="fa-solid fa-plus" style="font-size: 24px"></i> -->
-      </div>
+      <RouterLink :to="{ name: 'fivedays' }" class="link">Five Days</RouterLink>
+
+      <!-- <div class="info-icon-wrapper"> -->
+      <!-- <i class="fa-solid fa-star" style="font-size: 24px"></i> -->
+      <!-- <i class="fa-solid fa-plus" style="font-size: 24px"></i> -->
+      <!-- </div> -->
     </nav>
   </header>
 </template>
@@ -30,6 +32,7 @@ header {
   padding: 2rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   color: white;
   padding-top: 24px;
@@ -60,5 +63,17 @@ header {
   color: #004e71;
   transition: all 250ms ease-in-out;
   cursor: pointer;
+}
+
+.link {
+  padding: 6px;
+  color: white;
+  scale: 1;
+  transition: all 250ms ease-in-out;
+}
+
+.link:hover {
+  color: #02334a;
+  scale: 1.2;
 }
 </style>

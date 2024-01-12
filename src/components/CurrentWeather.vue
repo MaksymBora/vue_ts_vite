@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ref } from "vue";
 import { useWeatherStore } from "@/store/weatherStore";
 import { weatherIcon } from "../utils/icons";
 import { formatDateTime } from "../utils/formatData";
