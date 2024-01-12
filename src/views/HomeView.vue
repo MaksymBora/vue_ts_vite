@@ -1,12 +1,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useCounterStore } from "../store/testStore";
-import { onMounted } from "vue";
-import { fetchWeather, fetchHourlyWeather } from "../services/weatherAPI";
-import { weatherIcon } from "../utils/icons";
-import { formatDateTime } from "../utils/formatData";
+import { fetchWeather } from "../services/weatherAPI";
+import WeatherTable from "@/components/WeatherTable.vue";
+import CurrentWeather from "@/components/CurrentWeather.vue";
+
 import { type City, type List } from "@/types/WeatherTypes";
-import { type CurrentWeatherTypes } from "@/types/CurrentWeatherTypes";
 
 const searchQuery = ref("");
 const queryTimeout = ref<number>();
@@ -15,36 +13,6 @@ const searchResultCity = ref<City>();
 const searchResults = ref<List[]>();
 
 const searchError = ref<boolean>();
-
-const currentWeather = ref<CurrentWeatherTypes>();
-
-const CounterStore = useCounterStore();
-
-console.log(CounterStore.count);
-
-CounterStore.increment();
-
-console.log(CounterStore.count);
-
-interface CoordinatesType {
-  lat: number;
-  lon: number;
-}
-
-const coordinates: CoordinatesType = {
-  lat: 50.35,
-  lon: 7.6,
-};
-
-onMounted(async () => {
-  try {
-    const res = await fetchHourlyWeather(coordinates.lat, coordinates.lon);
-
-    currentWeather.value = res;
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 const getSearchResults = () => {
   clearTimeout(queryTimeout.value);
@@ -77,6 +45,8 @@ const getSearchResults = () => {
         placeholder="Search for a city"
       />
 
+      <CurrentWeather />
+
       <p class="result-info" v-if="searchError">Sorry, something went wrong!</p>
       <p v-if="!searchError && searchResults?.length === 0">
         No results match your query, try a different term.
@@ -86,33 +56,7 @@ const getSearchResults = () => {
         {{ searchResultCity?.name }}
       </h2>
 
-      <table v-if="searchResults" class="weatherTable">
-        <thead>
-          <tr>
-            <th>Date and Time</th>
-            <th>Min Temperature</th>
-            <th>Max Temperature</th>
-            <th>Weather Condition</th>
-          </tr>
-        </thead>
-        <tbody v-if="searchResults">
-          <tr
-            v-for="searchResult in searchResults"
-            :key="searchResult.dt"
-            class="weatherRow"
-          >
-            <td>{{ formatDateTime(searchResult?.dt_txt) }}</td>
-            <td>{{ Math.floor(searchResult.main?.temp_min) }}</td>
-            <td>{{ Math.floor(searchResult.main?.temp_max) }}</td>
-            <td>
-              <img
-                :src="`${weatherIcon(searchResult.weather[0]?.description)}`"
-                alt="Weather Icon"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <WeatherTable :searchResults="searchResults" />
     </div>
   </main>
 </template>
@@ -158,25 +102,7 @@ const getSearchResults = () => {
   margin-top: 24px;
 }
 
-.weatherTable {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 16px;
-}
-
-.weatherTable th,
-.weatherTable td {
-  border: 1px solid white;
-  padding: 8px;
-  text-align: center;
-}
-
-.weatherRow:hover {
-  background-color: #003c5a;
-}
-
 .result-info {
   padding: 8px 0;
 }
 </style>
-../services/weatherAPI.js

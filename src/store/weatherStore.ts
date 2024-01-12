@@ -3,20 +3,13 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { fetchHourlyWeather } from "../services/weatherAPI";
 
-export const useCounterStore = defineStore("counter", () => {
-  const count = ref(0);
-  const name = ref("Eduardo");
-  const doubleCount = computed(() => count.value * 2);
-  const currentWeatherResult = ref<CurrentWeatherTypes>();
+interface CoordinatesType {
+  lat: number;
+  lon: number;
+}
 
-  function increment() {
-    count.value++;
-  }
-
-  interface CoordinatesType {
-    lat: number;
-    lon: number;
-  }
+export const useWeatherStore = defineStore("weather", () => {
+  const currentWeatherResult = ref<CurrentWeatherTypes | null>(null);
 
   const coordinates: CoordinatesType = {
     lat: 50.35,
@@ -34,10 +27,7 @@ export const useCounterStore = defineStore("counter", () => {
   }
 
   return {
-    count,
     name,
-    doubleCount,
-    increment,
     currentWeather,
     currentWeatherResult,
   };

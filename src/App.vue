@@ -2,9 +2,9 @@
 import { RouterView } from "vue-router";
 import { onMounted } from "vue";
 import Navigation from "./components/Navigation.vue";
-import { useCounterStore } from "./store/testStore";
+import { useWeatherStore } from "@/store/weatherStore";
 
-const counterStore = useCounterStore();
+const counterStore = useWeatherStore();
 
 onMounted(async () => {
   return await counterStore.currentWeather();
@@ -28,3 +28,4 @@ onMounted(async () => {
   background-color: #00668a;
 }
 </style>
+./store/weatherStore
